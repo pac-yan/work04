@@ -1,19 +1,50 @@
 import math
 
 def make_translate( x, y, z ):
-    pass
+    t = new_matrix()
+    ident(t)
+    t[3][0] = x 
+    t[3][1] = y 
+    t[3][2] = z 
+    return t  
 
 def make_scale( x, y, z ):
-    pass
+    s = new_matrix()
+    ident(s)
+    s[0][0] = x 
+    s[1][1] = y 
+    s[2][2] = z 
+    return s
 
-def make_rotX( theta ):    
-    pass
+def make_rotZ( theta ):    
+    a = math.radians(theta)
+    r = new_matrix()
+    ident(r)
+    r[0][0] = math.cos(a)
+    r[1][0] = -math.sin(a)
+    r[0][1] = math.sin(a)
+    r[1][1] = math.cos(a)
+    return r 
+
+def make_rotX( theta ):
+    a = math.radians(theta)
+    r = new_matrix()
+    ident(r)
+    r[1][1] = math.cos(a)
+    r[2][1] = -math.sin(a)
+    r[1][2] = math.sin(a)
+    r[2][2] = math.cos(a)
+    return r 
 
 def make_rotY( theta ):
-    pass
-
-def make_rotZ( theta ):
-    pass
+    a = math.radians(theta)
+    r = new_matrix()
+    ident(r)
+    r[0][0] = math.cos(a)
+    r[0][3] = -math.sin(a)
+    r[2][0] = math.sin(a)
+    r[2][3] = math.cos(a)
+    return r 
 
 def print_matrix( matrix ):
     s = ''
@@ -31,6 +62,11 @@ def ident( matrix ):
             else:
                 matrix[c][r] = 0
 
+def scalar_mult( matrix, s ):
+    for r in range( len( matrix[0] ) ):
+        for c in range( len(matrix) ):
+            matrix[c][r]*= s
+            
 #m1 * m2 -> m2
 def matrix_mult( m1, m2 ):
 

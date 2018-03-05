@@ -28,8 +28,44 @@ The file follows the following format:
 	    save the screen to a file -
 	    takes 1 argument (file name)
 	 quit: end parsing
-
 See the file script for an example of the file format
 """
 def parse_file( fname, points, transform, screen, color ):
-    pass
+	file = open(fname)
+	lines = file.readlines()
+	for x in range(len(lines)): 
+		if lines[x] == "line\n": 
+			c = lines[x+1].split(" ") 
+			add_edge(points, int(c[0]), int(c[1]), int(c[2]), int(c[3]), int(c[4]), int(c[5]))
+		elif lines[x] == "ident\n": 
+			ident(transform)
+		elif lines[x] == "scale\n": 
+			num = lines[x+1].split(" ")
+			s = make_scale(int(num[0]), int(num[1]), int(num[2]))
+			matrix_mult(s, transform)
+		elif lines[x] == "move\n": 
+			num = lines[x+1].split(" ")
+			tr = make_translate(int(num[0]), int(num[1]), int(num[2]))
+			matrix_mult(tr, transform)
+		elif lines[x] == "rotate\n": 
+			commands = lines[x+1].split(" ")
+			if commands[0] == "x": 
+				r = make_rotX(int(commands[1]))
+			if commands[0] == "y": 
+				r = make_rotY(int(commands[1]))
+			if commands[0] == "z": 
+				r = make_rotZ(int(commands[1]))
+			matrix_mult(r, transform)
+		elif lines[x] == "apply\n": 
+			matrix_mult(transform, points)
+		elif lines[x] == "display\n": 
+			for x in range(len(points)): 
+				for y in range(len(points[0])): 
+					points[x][y] = int(points[x][y])
+			clear_screen(screen)
+			draw_lines(points, screen, color)
+			display(screen)
+		elif lines[x] == "save\n": 
+			save_extension(screen, lines[x+1].strip())
+		elif lines[x] == "quit\n": 
+			break
